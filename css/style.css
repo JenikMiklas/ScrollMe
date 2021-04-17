@@ -1,13 +1,34 @@
+/* DEMO CSS */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* all pages settings */
 .section {
     height: 100vh;
 }
 
+/* individual page settings  */
+.page1 {
+    background: lightblue;
+}
+
+.page2 {
+    background: lightcoral;
+}
+
+.page3 {
+    background: lightsalmon;
+}
+
+.page4 {
+    background: lightseagreen;
+}
+
+/* not inportant */
 h1 {
     position: relative;
     text-align: center;
@@ -37,20 +58,4 @@ h1 {
 
 h2 {
     font-size: 15vh;
-}
-
-.page1 {
-    background: lightblue;
-}
-
-.page2 {
-    background: lightcoral;
-}
-
-.page3 {
-    background: lightsalmon;
-}
-
-.page4 {
-    background: lightseagreen;
 }

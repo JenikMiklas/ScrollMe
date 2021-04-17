@@ -1,3 +1,5 @@
+<!-- DEMO HTML-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,17 +10,21 @@
     <title>Scroll Nav</title>
 </head>
 <body>
+    <!-- Define number of pages (sections) with class name eg. section -->
     <section class="section page1">
         <h1>#1</h1>
         <ul>
+            <!-- Define number nav "links" to sections with class name eg. navPage1...navPage4 -->
             <li class="navPage2">#2</li>
             <li class="navPage3">#3</li>
             <li class="navPage4">#4</li>
         </ul>
     </section>
+    <!-- This DEMO has 4 pages (sections) -->
     <section class="section page2">
         <h1>#2</h1>
         <ul>
+        <!-- This DEMO has on every page (section) nav "links" -->   
             <li class="navPage1">#1</li>
             <li class="navPage3">#3</li>
             <li class="navPage4">#4</li>
@@ -40,12 +46,14 @@
             <li class="navPage3">#3</li>
         </ul>
     </section>
+    <!-- import js -->
     <script src="./js/scrollme.js"></script>
     <script>
+         // instance of class: 1st parametr is class name of pages (sections), 2nd is array of navigations links 
         let scrollMe = new ScrollMe(".section", [".navPage1", ".navPage2", ".navPage3", ".navPage4"])
-        scrollMe.duration = 5000
+        //animation speed
+        scrollMe.duration = 1000
         
     </script>
-    <!--<script src="./js/app.js"></script>-->
 </body>
 </html>
