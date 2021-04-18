@@ -19,10 +19,11 @@ class ScrollMe {
     }
     
     #scrollToo(section) {
+        ScrollMe.#Animating = true
         // element sekce stránky
         let target = section
         this.currentPage = this.#sectionNodes.indexOf(section) + 1
-        console.log(this.currentPage)
+        console.log("Current page: "+this.currentPage)
         // získá y souřadnici daného elementu
         let targetPosition = target.getBoundingClientRect().top
         // hodnota aktuální souřadnice y (kde se zrovna nacházím při scrollování stránky)
@@ -59,7 +60,27 @@ class ScrollMe {
         requestAnimationFrame(animation)
     }
     
-    // prováže navigační prvky a sekce, nastavení listenerů včech navigačních prvků na akci click
+    // fce volána při použítí kolečka myši
+    #wheele(event) {
+        const previousPage = this.currentPage
+        if(event.deltaY > 0) {
+            this.currentPage += 1
+        } else {
+            this.currentPage -= 1
+        }
+        if(this.currentPage <= 0) { 
+            this.currentPage = 1 
+        }
+        else if (this.currentPage > this.#sectionNodes.length) { 
+            this.currentPage = this.#sectionNodes.length 
+        }
+        if(previousPage != this.currentPage) {
+            this.#scrollToo(this.#sectionNodes[this.currentPage-1])
+        }
+       
+    }
+
+    // prováže navigační prvky a sekce, nastavení listenerů včech navigačních prvků na akci click a wheel (kolečka myši)
     #initEventListernes() {
         let navigations = []
         let sections = []
@@ -70,11 +91,18 @@ class ScrollMe {
         this.#navigationNodes.forEach(navTxt => {
             navigations.push(document.querySelectorAll(navTxt))
         })
+        document.addEventListener("wheel", (event) => {
+            if(!ScrollMe.#Animating) {
+                window.addEventListener("wheel", e => e.preventDefault(), { passive:false })
+                if(!ScrollMe.#Animating) {
+                    this.#wheele(event)
+                }
+            }
+        })
         for (let key in navigations) {
             navigations[key].forEach(nav => {
                 nav.addEventListener("click", () => {
                     if(!ScrollMe.#Animating) {
-                        ScrollMe.#Animating = true
                         this.#scrollToo(sections[key])
                     }
                 }) 
