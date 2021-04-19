@@ -4,25 +4,23 @@ class ScrollMe {
     currentPage = 1 //aktuální stránka
     duration = 5000 //rychlost animace scrollování
 
-    //PRIVATE
-    #sectionNodes   // pole sekcí (stránek)
-    #navigationNodes // pole navigačních elementů
+    sectionNodes   // pole sekcí (stránek)
+    navigationNodes // pole navigačních elementů
 
-    //CLASS PRIVATE
-    static #Animating = false
+    animating = false
 
     //init()
     constructor(sectionNodes, navNodes) {
-        this.#sectionNodes = sectionNodes
-        this.#navigationNodes = navNodes
-        this.#initEventListernes()
+        this.sectionNodes = sectionNodes
+        this.navigationNodes = navNodes
+        this.initEventListernes()
     }
     
-    #scrollToo(section) {
-        ScrollMe.#Animating = true
+    scrollToo(section) {
+        ScrollMe.animating = true
         // element sekce stránky
         let target = section
-        this.currentPage = this.#sectionNodes.indexOf(section) + 1
+        this.currentPage = this.sectionNodes.indexOf(section) + 1
         console.log("Current page: "+this.currentPage)
         // získá y souřadnici daného elementu
         let targetPosition = target.getBoundingClientRect().top
@@ -45,7 +43,7 @@ class ScrollMe {
                 requestAnimationFrame(animation)
             } else {
                 console.log("ANIMATION FINISHED")
-                ScrollMe.#Animating = false
+                ScrollMe.animating = false
             }
         }
 
@@ -61,7 +59,7 @@ class ScrollMe {
     }
     
     // fce volána při použítí kolečka myši
-    #wheele(event) {
+    wheele(event) {
         const previousPage = this.currentPage
         if(event.deltaY > 0) {
             this.currentPage += 1
@@ -71,39 +69,39 @@ class ScrollMe {
         if(this.currentPage <= 0) { 
             this.currentPage = 1 
         }
-        else if (this.currentPage > this.#sectionNodes.length) { 
-            this.currentPage = this.#sectionNodes.length 
+        else if (this.currentPage > this.sectionNodes.length) { 
+            this.currentPage = this.sectionNodes.length 
         }
         if(previousPage != this.currentPage) {
-            this.#scrollToo(this.#sectionNodes[this.currentPage-1])
+            this.scrollToo(this.sectionNodes[this.currentPage-1])
         }
        
     }
 
     // prováže navigační prvky a sekce, nastavení listenerů včech navigačních prvků na akci click a wheel (kolečka myši)
-    #initEventListernes() {
+    initEventListernes() {
         let navigations = []
         let sections = []
-        document.querySelectorAll(this.#sectionNodes).forEach(section => {
+        document.querySelectorAll(this.sectionNodes).forEach(section => {
             sections.push(section)
         })
-        this.#sectionNodes = sections
-        this.#navigationNodes.forEach(navTxt => {
+        this.sectionNodes = sections
+        this.navigationNodes.forEach(navTxt => {
             navigations.push(document.querySelectorAll(navTxt))
         })
         document.addEventListener("wheel", (event) => {
-            if(!ScrollMe.#Animating) {
+            if(!ScrollMe.animating) {
                 window.addEventListener("wheel", e => e.preventDefault(), { passive:false })
-                if(!ScrollMe.#Animating) {
-                    this.#wheele(event)
+                if(!ScrollMe.animating) {
+                    this.wheele(event)
                 }
             }
         })
         for (let key in navigations) {
             navigations[key].forEach(nav => {
                 nav.addEventListener("click", () => {
-                    if(!ScrollMe.#Animating) {
-                        this.#scrollToo(sections[key])
+                    if(!ScrollMe.animating) {
+                        this.scrollToo(sections[key])
                     }
                 }) 
             })
