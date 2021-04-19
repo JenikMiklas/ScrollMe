@@ -40,16 +40,19 @@ h1 {
 
 ul {
     list-style: none;
-    position: relative;
+    position: fixed;
     text-align: center;
-    width: 10vh;
     top: 50%;
     left: 95%;
     transform: translate(-95%, -50%);
 }
 
 li {
-    font-size: 10vh;
+    font-size: 5vh;
+}
+
+li:hover {
+    font-size: 8vh;
 }
 
 h1 {
