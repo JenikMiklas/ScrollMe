@@ -4,22 +4,24 @@ class ScrollMe {
     currentPage = 1 //aktuální stránka
     duration = 5000 //rychlost animace scrollování
 
-    sectionNodes   // pole sekcí (stránek)
-    navigationNodes // pole navigačních elementů
+    //PRIVATE
+    #sectionNodes   // pole sekcí (stránek)
+    #navigationNodes // pole navigačních elementů
 
-    animating = false
+    //STATIC PRIVATE
+    static #ANIMATING = false
 
     //init()
     constructor(sectionNodes, navNodes) {
-        this.sectionNodes = sectionNodes
-        this.navigationNodes = navNodes
+        this.#sectionNodes = sectionNodes
+        this.#navigationNodes = navNodes
         this.initEventListernes()
     }
     
-    scrollMe(section) {
+    #scrollMe(section) {
         // element sekce stránky
         let target = section
-        this.currentPage = this.sectionNodes.indexOf(section) + 1
+        this.currentPage = this.#sectionNodes.indexOf(section) + 1
         console.log("Current page: "+this.currentPage)
         // získá y souřadnici daného elementu
         let targetPosition = target.getBoundingClientRect().top
@@ -33,7 +35,7 @@ class ScrollMe {
 
         // funkce se vykonává dokola dokud animace neskončí
         function animation(currentTime) {
-            //console.log(global.animating)
+            //console.log(global.#ANIMATING)
             if(startTime === null) startTime = currentTime
             let timeElapsed = currentTime - startTime
             let run = easeInOutCubic(timeElapsed, startPosition, distance, duration)
@@ -42,7 +44,7 @@ class ScrollMe {
                 requestAnimationFrame(animation)
             } else {
                 console.log("ANIMATION FINISHED")
-                ScrollMe.animating = false
+                ScrollMe.#ANIMATING = false
             }
         }
 
@@ -55,13 +57,13 @@ class ScrollMe {
         }
 
         console.log("ANIMATION STARTED")
-        ScrollMe.animating = true
+        ScrollMe.#ANIMATING = true
         requestAnimationFrame(animation)
     }
     
     // fce volána při použítí kolečka myši
-    wheeleMe(event) {
-        if(!ScrollMe.animating) {
+    #wheeleMe(event) {
+        if(!ScrollMe.#ANIMATING) {
             const previousPage = this.currentPage
             if(event.deltaY > 0) {
                 this.currentPage += 1
@@ -71,20 +73,20 @@ class ScrollMe {
             if(this.currentPage <= 0) { 
                 this.currentPage = 1 
             }
-            else if (this.currentPage > this.sectionNodes.length) { 
-                this.currentPage = this.sectionNodes.length 
+            else if (this.currentPage > this.#sectionNodes.length) { 
+                this.currentPage = this.#sectionNodes.length 
             }
             if(previousPage != this.currentPage) {
-                this.scrollMe(this.sectionNodes[this.currentPage-1])
+                this.#scrollMe(this.#sectionNodes[this.currentPage-1])
             }
         }
        
     }
 
     // fce volána při kliknutí myši
-    clickMe(index) {
-        if(!ScrollMe.animating && Number(index)+1 != this.currentPage) {
-            this.scrollMe(this.sectionNodes[index])
+    #clickMe(index) {
+        if(!ScrollMe.#ANIMATING && Number(index)+1 != this.currentPage) {
+            this.#scrollMe(this.#sectionNodes[index])
         }
     }
 
@@ -92,23 +94,23 @@ class ScrollMe {
     initEventListernes() {
         let navigations = []
         let sections = []
-        document.querySelectorAll(this.sectionNodes).forEach(section => {
+        document.querySelectorAll(this.#sectionNodes).forEach(section => {
             sections.push(section)
         })
-        this.sectionNodes = sections
-        this.navigationNodes.forEach(navTxt => {
+        this.#sectionNodes = sections
+        this.#navigationNodes.forEach(navTxt => {
             navigations.push(document.querySelectorAll(navTxt))
         })
         document.addEventListener("wheel", (event) => {
-            if(!ScrollMe.animating) {
+            if(!ScrollMe.#ANIMATING) {
                 window.addEventListener("wheel", e => e.preventDefault(), { passive:false })
-                this.wheeleMe(event)
+                this.#wheeleMe(event)
             }
         })
         for (let key in navigations) {
             navigations[key].forEach(nav => {
                 nav.addEventListener("click", () => {
-                    this.clickMe(key)
+                    this.#clickMe(key)
                 }) 
             })
         }
