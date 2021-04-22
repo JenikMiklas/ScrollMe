@@ -1,2 +1,3 @@
 # ScrollMe
-The js class adding animation during scrolling or navigating content of page.
+The js class creating smooth animation during scrolling or navigating on an page.
+
